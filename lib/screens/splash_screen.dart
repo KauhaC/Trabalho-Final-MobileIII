@@ -8,38 +8,66 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
   @override
   void initState() {
     super.initState();
-    // Espera 2 segundos antes de ir para a tela de login
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+
+    _scaleAnimation =
+        CurvedAnimation(parent: _controller, curve: Curves.easeInOutBack);
+
+    _controller.forward();
+
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+        );
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.indigo,
+      backgroundColor: Theme.of(context).primaryColor,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.mobile_friendly, size: 100, color: Colors.white),
-            const SizedBox(height: 20),
-            const Text(
-              "Trabalho Final Mobile",
-              style: TextStyle(
+        child: ScaleTransition(
+          scale: _scaleAnimation,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.local_hospital,
+                size: 100,
                 color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
               ),
-            )
-          ],
+              const SizedBox(height: 20),
+              Text(
+                "Consultório Saúde+",
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineSmall
+                    ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
       ),
     );
