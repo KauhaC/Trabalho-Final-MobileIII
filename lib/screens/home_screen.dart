@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trabalho_final_mobile/screens/dashboard_screen.dart';
+import 'dashboard_screen.dart';
 import 'login_screen.dart';
 import 'pacientes_screen.dart';
 import 'paciente_form_screen.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,13 +20,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _logout() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove("token");
-    await prefs.remove("expiry");
+    await prefs.remove("accessToken");
 
     if (mounted) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
         (route) => false,
       );
     }
@@ -101,7 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
             flex: 2,
             child: DashboardScreen(pacientes: pacientes),
           ),
-
           const Divider(),
           Padding(
             padding: const EdgeInsets.all(16),
