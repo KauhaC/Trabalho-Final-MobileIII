@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen>
 
     _checkToken();
 
-    // Animação da logo
+    // Animação da logo no entrar
     _controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _scaleAnimation =
@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Fundo gradiente moderno
+      // Fundo 
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Logo do splash
+                    // Logo splash
                     const Icon(
                       Icons.local_hospital,
                       size: 80,
@@ -147,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                     ),
                     const SizedBox(height: 30),
-                    // Campos de login
+                    // Campos login
                     TextField(
                       controller: _usernameController,
                       decoration: InputDecoration(

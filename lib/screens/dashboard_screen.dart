@@ -12,6 +12,9 @@ class DashboardScreen extends StatelessWidget {
     int feminino = pacientes.where((p) => p["sexo"] == "F").length;
     int total = masculino + feminino;
 
+    double percMasculino = total > 0 ? (masculino / total * 100) : 0;
+    double percFeminino = total > 0 ? (feminino / total * 100) : 0;
+
     return Card(
       margin: const EdgeInsets.all(16),
       elevation: 4,
@@ -34,25 +37,30 @@ class DashboardScreen extends StatelessWidget {
                       value: masculino.toDouble(),
                       color: Colors.blue,
                       radius: 60,
-                      title: "", // sem texto dentro
+                      title: "",
                     ),
                     PieChartSectionData(
                       value: feminino.toDouble(),
                       color: Colors.pink,
                       radius: 60,
-                      title: "", // sem texto dentro
+                      title: "",
                     ),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            // === Legenda Bonita ===
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildLegendItem(Colors.blue, "Homens: $masculino"),
-                _buildLegendItem(Colors.pink, "Mulheres: $feminino"),
+                _buildLegendItem(
+                  Colors.blue,
+                  "Homens: $masculino (${percMasculino.toStringAsFixed(1)}%)",
+                ),
+                _buildLegendItem(
+                  Colors.pink,
+                  "Mulheres: $feminino (${percFeminino.toStringAsFixed(1)}%)",
+                ),
               ],
             ),
             const SizedBox(height: 8),

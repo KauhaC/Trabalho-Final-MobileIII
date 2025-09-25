@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trabalho_final_mobile/screens/home_screen.dart';
-import 'package:trabalho_final_mobile/screens/login_screen.dart';
-import 'screens/splash_screen.dart';
+import 'package:trabalho_final_mobile/screens/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,27 +8,13 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  Future<Widget> _decideScreen() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString("token");
-    final expiry = prefs.getString("expiry");
-
-    if (token != null && expiry != null) {
-      final expiryDate = DateTime.parse(expiry);
-      if (DateTime.now().isBefore(expiryDate)) {
-        return const HomeScreen();
-      }
-    }
-    return const LoginScreen();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Consultório Saúde+',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.teal, // verde-azulado
+          seedColor: Colors.teal, 
           primary: Colors.teal,
           secondary: Colors.lightBlueAccent,
         ),

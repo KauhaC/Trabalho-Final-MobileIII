@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class PacienteFormScreen extends StatefulWidget {
-  final Map<String, String>? paciente; // Se vier nulo, é novo paciente
-  final Function(Map<String, String>) onSave;
+  final Map<String, String>? paciente;
+  final Function(Map<String, String>)? onSave;
 
-  const PacienteFormScreen({
-    super.key,
-    this.paciente,
-    required this.onSave,
-  });
+  const PacienteFormScreen({super.key, this.paciente, this.onSave});
 
   @override
   State<PacienteFormScreen> createState() => _PacienteFormScreenState();
@@ -22,10 +18,8 @@ class _PacienteFormScreenState extends State<PacienteFormScreen> {
   final _idadeController = TextEditingController();
   final _cpfController = TextEditingController();
   final _telefoneController = TextEditingController();
+  String? _sexo;
 
-  String? _sexo; // novo campo
-
-  // Máscaras
   final _cpfMask = MaskTextInputFormatter(
     mask: "###.###.###-##",
     filter: {"#": RegExp(r'[0-9]')},
@@ -44,20 +38,21 @@ class _PacienteFormScreenState extends State<PacienteFormScreen> {
       _idadeController.text = widget.paciente!["idade"] ?? "";
       _cpfController.text = widget.paciente!["cpf"] ?? "";
       _telefoneController.text = widget.paciente!["telefone"] ?? "";
-      _sexo = widget.paciente!["sexo"]; // recupera sexo se existir
+      _sexo = widget.paciente!["sexo"];
     }
   }
 
   void _salvar() {
     if (_formKey.currentState!.validate() && _sexo != null) {
-      widget.onSave({
+      final paciente = {
         "nome": _nomeController.text,
         "idade": _idadeController.text,
         "cpf": _cpfController.text,
         "telefone": _telefoneController.text,
-        "sexo": _sexo!, // garante que vai ser salvo
-      });
-      
+        "sexo": _sexo!,
+      };
+
+      Navigator.pop(context, paciente); // retorna para PacientesScreen
     } else if (_sexo == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Selecione o sexo")),
@@ -72,7 +67,7 @@ class _PacienteFormScreenState extends State<PacienteFormScreen> {
         title: Text(widget.paciente == null ? "Novo Paciente" : "Editar Paciente"),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: ListView(
@@ -129,7 +124,7 @@ class _PacienteFormScreenState extends State<PacienteFormScreen> {
               ElevatedButton(
                 onPressed: _salvar,
                 child: const Text("Salvar"),
-              )
+              ),
             ],
           ),
         ),
